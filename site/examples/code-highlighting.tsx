@@ -27,7 +27,7 @@ import {
   useSlate,
   ReactEditor,
   useSlateStatic,
-} from 'slate-react'
+} from 'shadow-slate-react'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
 import { css } from '@emotion/css'
@@ -337,7 +337,7 @@ const App = () => {
     language: 'typescript',
     children: toCodeLines(`// TypeScript users only add this code
 import { BaseEditor, Descendant } from 'slate'
-import { ReactEditor } from 'slate-react'
+import { ReactEditor } from 'shadow-slate-react'
 
 type CustomElement = { type: 'paragraph'; children: CustomText[] }
 type CustomText = { text: string }

@@ -4,6 +4,6 @@
     { "path": "./packages/slate" },
     { "path": "./packages/slate-history" },
     { "path": "./packages/slate-hyperscript" },
-    { "path": "./packages/slate-react" }
+    { "path": "./packages/shadow-slate-react" }
   ]
 }

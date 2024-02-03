@@ -6,7 +6,7 @@ import {
   useSlateStatic,
   useReadOnly,
   ReactEditor,
-} from 'slate-react'
+} from 'shadow-slate-react'
 import {
   Editor,
   Transforms,

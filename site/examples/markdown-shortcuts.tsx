@@ -10,7 +10,7 @@ import {
   Transforms,
 } from 'slate'
 import { withHistory } from 'slate-history'
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
+import { Editable, ReactEditor, Slate, withReact } from 'shadow-slate-react'
 import { BulletedListElement } from './custom-types'
 
 const SHORTCUTS = {

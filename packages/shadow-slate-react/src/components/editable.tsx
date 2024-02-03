@@ -32,6 +32,7 @@ import {
   DOMNode,
   DOMRange,
   DOMText,
+  getActiveElement,
   getDefaultView,
   isDOMElement,
   isDOMNode,
@@ -149,6 +150,7 @@ export const Editable = (props: EditableProps) => {
   const [isComposing, setIsComposing] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const deferredOperations = useRef<DeferredOperation[]>([])
+  const processing = useRef(false)
 
   const { onUserInput, receivedUserInput } = useTrackUserInput()
 
@@ -184,6 +186,20 @@ export const Editable = (props: EditableProps) => {
   // while a selection is being dragged.
   const onDOMSelectionChange = useCallback(
     throttle(() => {
+      if (!processing.current && IS_SAFARI) {
+        processing.current = true
+
+        const active = getActiveElement()
+
+        if (active) {
+          document.execCommand('indent')
+        } else {
+          Transforms.deselect(editor)
+        }
+
+        processing.current = false
+        return
+      }
       if (
         (IS_ANDROID || !ReactEditor.isComposing(editor)) &&
         (!state.isUpdatingSelection || androidInputManager?.isFlushing()) &&
@@ -432,6 +448,28 @@ export const Editable = (props: EditableProps) => {
   // https://github.com/facebook/react/issues/11211
   const onDOMBeforeInput = useCallback(
     (event: InputEvent) => {
+      if (processing?.current && IS_SAFARI) {
+        // @ts-ignore
+        const ranges = event.getTargetRanges()
+        const range = ranges[0]
+
+        const newRange = new window.Range()
+
+        newRange.setStart(range.startContainer, range.startOffset)
+        newRange.setEnd(range.endContainer, range.endOffset)
+
+        // Translate the DOM Range into a Slate Range
+        const slateRange = ReactEditor.toSlateRange(editor, newRange, {
+          exactMatch: false,
+          suppressThrow: false,
+        })
+
+        Transforms.select(editor, slateRange)
+
+        event.preventDefault()
+        event.stopImmediatePropagation()
+        return
+      }
       onUserInput()
 
       if (

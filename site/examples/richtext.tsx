@@ -1,12 +1,13 @@
-import React, { useCallback, useMemo } from 'react'
+import ReactDOM from 'react-dom'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import isHotkey from 'is-hotkey'
-import { Editable, withReact, useSlate, Slate } from 'slate-react'
+import { Editable, Slate, useSlate, withReact } from 'shadow-slate-react'
 import {
-  Editor,
-  Transforms,
   createEditor,
   Descendant,
+  Editor,
   Element as SlateElement,
+  Transforms,
 } from 'slate'
 import { withHistory } from 'slate-history'
 
@@ -21,48 +22,6 @@ const HOTKEYS = {
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
-
-const RichTextExample = () => {
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-
-  return (
-    <Slate editor={editor} value={initialValue}>
-      <Toolbar>
-        <MarkButton format="bold" icon="format_bold" />
-        <MarkButton format="italic" icon="format_italic" />
-        <MarkButton format="underline" icon="format_underlined" />
-        <MarkButton format="code" icon="code" />
-        <BlockButton format="heading-one" icon="looks_one" />
-        <BlockButton format="heading-two" icon="looks_two" />
-        <BlockButton format="block-quote" icon="format_quote" />
-        <BlockButton format="numbered-list" icon="format_list_numbered" />
-        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-        <BlockButton format="left" icon="format_align_left" />
-        <BlockButton format="center" icon="format_align_center" />
-        <BlockButton format="right" icon="format_align_right" />
-        <BlockButton format="justify" icon="format_align_justify" />
-      </Toolbar>
-      <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
-        spellCheck
-        autoFocus
-        onKeyDown={event => {
-          for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-              event.preventDefault()
-              const mark = HOTKEYS[hotkey]
-              toggleMark(editor, mark)
-            }
-          }
-        }}
-      />
-    </Slate>
-  )
-}
 
 const toggleBlock = (editor, format) => {
   const isActive = isBlockActive(
@@ -270,4 +229,69 @@ const initialValue: Descendant[] = [
   },
 ]
 
-export default RichTextExample
+const RichTextShadowDomExample = () => {
+  const container = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (container.current!.shadowRoot) return
+
+    // Create a shadow DOM
+    const outerShadowRoot = container.current!.attachShadow({ mode: 'open' })
+    const host = document.createElement('div')
+    outerShadowRoot.appendChild(host)
+
+    // Create a nested shadow DOM
+    const innerShadowRoot = host.attachShadow({ mode: 'open' })
+    const reactRoot = document.createElement('div')
+    innerShadowRoot.appendChild(reactRoot)
+
+    // Render the editor within the nested shadow DOM
+    ReactDOM.render(<ShadowEditor />, reactRoot)
+  })
+
+  return <div ref={container} data-cy="outer-shadow-root" />
+}
+
+const ShadowEditor = () => {
+  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+  const renderElement = useCallback(props => <Element {...props} />, [])
+  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
+
+  return (
+    <Slate editor={editor} value={initialValue}>
+      <Toolbar>
+        <MarkButton format="bold" icon="format_bold" />
+        <MarkButton format="italic" icon="format_italic" />
+        <MarkButton format="underline" icon="format_underlined" />
+        <MarkButton format="code" icon="code" />
+        <BlockButton format="heading-one" icon="looks_one" />
+        <BlockButton format="heading-two" icon="looks_two" />
+        <BlockButton format="block-quote" icon="format_quote" />
+        <BlockButton format="numbered-list" icon="format_list_numbered" />
+        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
+        <BlockButton format="left" icon="format_align_left" />
+        <BlockButton format="center" icon="format_align_center" />
+        <BlockButton format="right" icon="format_align_right" />
+        <BlockButton format="justify" icon="format_align_justify" />
+      </Toolbar>
+      <Editable
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        placeholder="Enter some rich text…"
+        spellCheck
+        autoFocus
+        onKeyDown={event => {
+          for (const hotkey in HOTKEYS) {
+            if (isHotkey(hotkey, event as any)) {
+              event.preventDefault()
+              const mark = HOTKEYS[hotkey]
+              toggleMark(editor, mark)
+            }
+          }
+        }}
+      />
+    </Slate>
+  )
+}
+
+export default RichTextShadowDomExample

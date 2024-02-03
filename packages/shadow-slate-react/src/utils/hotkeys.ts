@@ -16,6 +16,7 @@ const HOTKEYS = {
   deleteForward: 'shift?+delete',
   extendBackward: 'shift+left',
   extendForward: 'shift+right',
+  extendWordBackward: 'opt+shift+left',
   italic: 'mod+i',
   insertSoftBreak: 'shift+enter',
   splitBlock: 'enter',
@@ -35,6 +36,7 @@ const APPLE_HOTKEYS = {
   deleteWordForward: 'opt+shift?+delete',
   extendLineBackward: 'opt+shift+up',
   extendLineForward: 'opt+shift+down',
+  extendWordBackward: 'opt+shift+left',
   redo: 'cmd+shift+z',
   transposeCharacter: 'ctrl+t',
 }
@@ -84,6 +86,7 @@ export default {
   isExtendForward: create('extendForward'),
   isExtendLineBackward: create('extendLineBackward'),
   isExtendLineForward: create('extendLineForward'),
+  isExtendWordBackward: create('extendWordBackward'),
   isItalic: create('italic'),
   isMoveLineBackward: create('moveLineBackward'),
   isMoveLineForward: create('moveLineForward'),

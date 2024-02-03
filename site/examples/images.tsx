@@ -10,7 +10,7 @@ import {
   useFocused,
   withReact,
   ReactEditor,
-} from 'slate-react'
+} from 'shadow-slate-react'
 import { withHistory } from 'slate-history'
 import { css } from '@emotion/css'
 

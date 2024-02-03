@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { createEditor } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact } from 'shadow-slate-react'
 import { withHistory } from 'slate-history'
 
 const StylingExample = () => {

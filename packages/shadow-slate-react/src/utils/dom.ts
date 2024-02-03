@@ -314,3 +314,18 @@ export const isTrackedMutation = (
   // Target add/remove is tracked. Track the mutation if we track the parent mutation.
   return isTrackedMutation(editor, parentMutation, batch)
 }
+
+export function getActiveElement() {
+  let active = document.activeElement
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    if (active && active.shadowRoot && active.shadowRoot.activeElement) {
+      active = active.shadowRoot.activeElement
+    } else {
+      break
+    }
+  }
+
+  return active
+}

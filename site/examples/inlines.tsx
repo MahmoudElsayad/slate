@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 import isUrl from 'is-url'
 import { isKeyHotkey } from 'is-hotkey'
 import { css } from '@emotion/css'
-import { Editable, withReact, useSlate, useSelected } from 'slate-react'
-import * as SlateReact from 'slate-react'
+import { Editable, withReact, useSlate, useSelected } from 'shadow-slate-react'
+import * as SlateReact from 'shadow-slate-react'
 import {
   Transforms,
   Editor,

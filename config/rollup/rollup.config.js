@@ -12,7 +12,7 @@ import { startCase } from 'lodash'
 import Core from '../../packages/slate/package.json'
 import History from '../../packages/slate-history/package.json'
 import Hyperscript from '../../packages/slate-hyperscript/package.json'
-import React from '../../packages/slate-react/package.json'
+import React from '../../packages/shadow-slate-react/package.json'
 
 /**
  * Return a Rollup configuration for a `pkg` with `env` and `target`.

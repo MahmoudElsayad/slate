@@ -1,7 +1,7 @@
 import Prism from 'prismjs'
 import 'prismjs/components/prism-markdown'
 import React, { useCallback, useMemo } from 'react'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact } from 'shadow-slate-react'
 import { Text, createEditor, Descendant } from 'slate'
 import { withHistory } from 'slate-history'
 import { css } from '@emotion/css'
