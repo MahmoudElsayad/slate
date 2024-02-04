@@ -186,7 +186,17 @@ export const Editable = (props: EditableProps) => {
   // while a selection is being dragged.
   const onDOMSelectionChange = useCallback(
     throttle(() => {
-      if (!processing.current && IS_SAFARI) {
+      const root = ReactEditor.findDocumentOrShadowRoot(editor)
+      const safariVersion = navigator.userAgent.match(/Version\/(\d+\.\d+)/)
+      const isSafariVersionLessThan17 =
+        IS_SAFARI && safariVersion && parseFloat(safariVersion[1]) < 17.0
+
+      if (
+        !processing.current &&
+        IS_SAFARI &&
+        root instanceof ShadowRoot &&
+        isSafariVersionLessThan17
+      ) {
         processing.current = true
 
         const active = getActiveElement()
@@ -448,7 +458,17 @@ export const Editable = (props: EditableProps) => {
   // https://github.com/facebook/react/issues/11211
   const onDOMBeforeInput = useCallback(
     (event: InputEvent) => {
-      if (processing?.current && IS_SAFARI) {
+      const root = ReactEditor.findDocumentOrShadowRoot(editor)
+      const safariVersion = navigator.userAgent.match(/Version\/(\d+\.\d+)/)
+      const isSafariVersionLessThan17 =
+        IS_SAFARI && safariVersion && parseFloat(safariVersion[1]) < 17.0
+
+      if (
+        processing?.current &&
+        IS_SAFARI &&
+        root instanceof ShadowRoot &&
+        isSafariVersionLessThan17
+      ) {
         // @ts-ignore
         const ranges = event.getTargetRanges()
         const range = ranges[0]
